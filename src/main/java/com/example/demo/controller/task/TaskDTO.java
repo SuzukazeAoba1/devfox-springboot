@@ -9,6 +9,7 @@ public record TaskDTO (
         String status
 ) {
 
+    // Entity -> DTO
     public static TaskDTO toDTO(TaskEntity entity){
         return new TaskDTO(
                 entity.id(),

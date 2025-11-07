@@ -1,2 +1,2 @@
-INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot', 'TODO', 'DONE');
-INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot', 'TODO', 'DONE');
+INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot1', 'Spring Boot1 test', 'DONE');
+INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot2', 'Spring Boot2 test', 'DOING');

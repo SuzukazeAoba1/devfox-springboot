@@ -3,6 +3,7 @@ package com.example.demo.service.task;
 import com.example.demo.repository.task.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,5 +20,20 @@ public class TaskService {
 
     public Optional<TaskEntity> findById(long taskId) {
         return taskRepository.selectById(taskId);
+    }
+
+    @Transactional //問題発生時にロールバック
+    public void create(TaskEntity newEntity) {
+        taskRepository.insert(newEntity);
+    }
+
+    @Transactional
+    public void update(TaskEntity entity) {
+        taskRepository.update(entity);
+    }
+
+    @Transactional
+    public void delete(long id) {
+        taskRepository.delete(id);
     }
 }

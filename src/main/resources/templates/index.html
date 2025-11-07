@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}">
 </head>
 <body>
-<h1>Hello, world! from Thymeleaf</h1>
+<h1 class="mt-3 ms-3">Hello, world! from Thymeleaf</h1>
+<a th:href="@{/tasks}" class="btn btn-primary mt-3 ms-3">タスク一覧ページに</a>
 </body>
 </html>

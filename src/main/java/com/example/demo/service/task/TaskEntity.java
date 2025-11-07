@@ -1,14 +1,9 @@
 package com.example.demo.service.task;
 
-import org.apache.ibatis.annotations.Mapper;
-
 public record TaskEntity(
-        long id,
+        Long id,
         String summary,
         String description,
         TaskStatus status
 ) {
-
-
-
 }
