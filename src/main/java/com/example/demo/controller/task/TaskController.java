@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor // コンストラクタの自動生成
@@ -17,13 +18,18 @@ public class TaskController {
 
     //リスト照会機能
     @GetMapping
-    public String list(Model model){
-        var taskList = taskService.find()
+    public String list(Model model,
+                       @RequestParam(value = "page", required = false, defaultValue = "1") int page){
+
+        var taskList = taskService.findList(page)
                 .stream()   // Iterator (List -> Stream)
                 .map(TaskDTO::toDTO) // foreach + function pointer
                 .toList(); // Stream -> List
 
+
+        model.addAttribute("maxPageNum", taskService.getCountPageNum());
         model.addAttribute("taskList", taskList);
+        model.addAttribute("page", page);
         return "tasks/list";
     }
 
@@ -46,12 +52,17 @@ public class TaskController {
 
     //書き込み機能
     @PostMapping
-    public String create(@Validated TaskForm form, BindingResult bindingResult, Model model){ // @Validated -> Jakarta Validation check
+    public String create(@Validated TaskForm form,
+                         @RequestParam(defaultValue = "1") int page,
+                         BindingResult bindingResult,
+                         Model model,
+                         RedirectAttributes ra){ // @Validated -> Jakarta Validation check
         if(bindingResult.hasErrors()){
             return showCreationForm(form, model);
         }
         taskService.create(form.toEntity());
-        return "redirect:/tasks"; //PRGパタン
+        ra.addAttribute("page", page);
+        return "redirect:/tasks"; //PRGパタン、redirectにはRedirectAttributesが必要
     }
 
     //修正フォーム
@@ -68,9 +79,11 @@ public class TaskController {
     //修正機能
     @PutMapping("{id}")
     public String update(@PathVariable("id") long id,
+                         @RequestParam(defaultValue = "1") int page,
                          @Validated @ModelAttribute TaskForm form,
                          BindingResult bindingResult,
-                         Model model
+                         Model model,
+                         RedirectAttributes ra
     ){
         if(bindingResult.hasErrors()){
             model.addAttribute("taskForm", form);
@@ -80,7 +93,8 @@ public class TaskController {
 
         var entity = form.toEntity(id);
         taskService.update(entity);
-        return "redirect:/tasks/{id}";
+        ra.addAttribute("page", page);
+        return "redirect:/tasks/{id}"; //redirectにはRedirectAttributesが必要
     }
 
     //削除機能

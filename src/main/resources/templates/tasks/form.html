@@ -8,7 +8,8 @@
 <body>
 <section>
     <div>
-        <form th:action="${mode == 'CREATE'} ? @{/tasks} : @{/tasks/{id}(id=${id})}"
+        <form th:action="${mode == 'CREATE'} ? @{/tasks?page={page}(page=${param.page})}
+                                             : @{/tasks/{id}?page={page}(id=${id}, page=${param.page})}"
               th:method="${mode == 'CREATE'} ? post : put"
               th:object="${taskForm}">
           <div class="mt-3 ms-3">
@@ -32,7 +33,9 @@
           </div>
           <div class="mt-3 ms-3">
               <button type="submit" class="btn btn-secondary" th:text="${mode == 'CREATE'} ? '作成' : '編集'"></button>
-              <a th:href="${mode == 'CREATE'} ? @{/tasks} : @{/tasks/{id}(id=${id})}" class="btn btn-secondary">戻る</a>
+              <a th:href="${mode == 'CREATE'} ? @{/tasks?page={page}(page=${param.page})}
+                                              : @{/tasks/{id}?page={page}(id=${id}, page=${param.page})}"
+                 class="btn btn-secondary">戻る</a>
           </div>
         </form>
     </div>

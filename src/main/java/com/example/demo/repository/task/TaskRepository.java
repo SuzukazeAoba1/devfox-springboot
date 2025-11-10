@@ -9,8 +9,11 @@ import java.util.Optional;
 @Mapper
 public interface TaskRepository {
 
-    @Select("SELECT id, summary, description, status FROM tasks;")
-    List<TaskEntity> select();
+    @Select("SELECT COUNT(*) FROM tasks;")
+    int selectAllCounter();
+
+    @Select("SELECT * FROM tasks LIMIT #{count} OFFSET #{offset}")
+    List<TaskEntity> selectList(@Param("offset") int offset, @Param("count") int count);
 
     @Select("SELECT id, summary, description, status FROM tasks Where id = #{taskId};")
     Optional<TaskEntity> selectById(@Param("taskId") long taskId);

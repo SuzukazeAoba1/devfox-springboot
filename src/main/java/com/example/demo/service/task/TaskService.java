@@ -14,8 +14,28 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
 
-    public List<TaskEntity> find(){
-        return taskRepository.select();
+    public List<TaskEntity> findList(int pageNum){
+
+        int maxPage = 5;
+        int postcnt = taskRepository.selectAllCounter(); // 8
+        int offset = (pageNum-1) * maxPage;
+        int lastPage = ((postcnt-1) % maxPage) + 1; // 8%5 = 3, 9%5 = 4, 10%5 = 5, 11%5 = 1
+        int pageSize;
+
+        if(pageNum * maxPage > postcnt)
+        {
+            pageSize = lastPage;
+        }
+        else
+        {
+            pageSize = maxPage;
+        }
+
+        return taskRepository.selectList(offset, pageSize);
+    }
+
+    public int getCountPageNum() {
+        return taskRepository.selectAllCounter() / 5 + 1;
     }
 
     public Optional<TaskEntity> findById(long taskId) {

@@ -1,2 +1,16 @@
 INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot1', 'Spring Boot1 test', 'DONE');
 INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot2', 'Spring Boot2 test', 'DOING');
+INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot3', 'Spring Boot3 test', 'DONE');
+INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot4', 'Spring Boot4 test', 'DOING');
+INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot5', 'Spring Boot5 test', 'DONE');
+INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot6', 'Spring Boot6 test', 'DOING');
+INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot7', 'Spring Boot7 test', 'DONE');
+INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot8', 'Spring Boot8 test', 'DOING');
+INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot9', 'Spring Boot9 test', 'DOING');
+INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot10', 'Spring Boot10 test', 'DONE');
+INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot11', 'Spring Boot11 test', 'DOING');
+INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot12', 'Spring Boot12 test', 'DONE');
+INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot13', 'Spring Boot13 test', 'DOING');
+INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot14', 'Spring Boot14 test', 'DOING');
+INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot15', 'Spring Boot15 test', 'DONE');
+INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot16', 'Spring Boot16 test', 'DOING');
