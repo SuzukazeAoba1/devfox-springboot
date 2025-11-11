@@ -7,6 +7,7 @@
 </head>
 <body>
 <h1 class="mt-3 ms-3">タスク一覧</h1>
+<hr>
 <div class="mt-3 ms-3">
     <table>
         <thead>
@@ -25,10 +26,12 @@
             <td th:text="*{status}"></td>
         </tr>
         </tbody>
-    </table>
-    <tr th:each="page : ${#numbers.sequence(1,maxPageNum)}">
+    </table> <!-- #numbers.sequence(start, end, step) -->
+    <hr>
+    <tr th:each="page : ${#numbers.sequence(1, maxPageNum)}">
         <td><a th:href="@{/tasks?page={page}(page=${page})}" th:text="${page}"></a></td>
     </tr>   <!-- query string -->
+    <hr>
 </div>
 <div class="mt-3 ms-3">
     <a th:href="@{/tasks/creationForm?page={page}(page=${page})}" class="btn btn-primary">作成</a>

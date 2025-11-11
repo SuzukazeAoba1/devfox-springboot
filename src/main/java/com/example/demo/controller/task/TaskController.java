@@ -1,5 +1,7 @@
 package com.example.demo.controller.task;
 
+import com.example.demo.service.comment.CommentEntity;
+import com.example.demo.service.comment.CommentService;
 import com.example.demo.service.task.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class TaskController {
 
     private final TaskService taskService;
+    private final CommentService commentService;
 
     //リスト照会機能
     @GetMapping
@@ -25,7 +28,6 @@ public class TaskController {
                 .stream()   // Iterator (List -> Stream)
                 .map(TaskDTO::toDTO) // foreach + function pointer
                 .toList(); // Stream -> List
-
 
         model.addAttribute("maxPageNum", taskService.getCountPageNum());
         model.addAttribute("taskList", taskList);
@@ -39,13 +41,19 @@ public class TaskController {
         var taskDTO = taskService.findById(taskId)
                 .map(TaskDTO::toDTO)
                 .orElseThrow(TaskNotFoundException::new); //投稿が存在しない場合
+        var commentList = commentService.findByTaskId(taskId)
+                .stream()
+                .map(CommentDTO::toDTO)
+                .toList();
+
         model.addAttribute("task", taskDTO);
+        model.addAttribute("comment", commentList);
         return "tasks/detail";
     }
 
     //書き込みフォーム
     @GetMapping("/creationForm")
-    public String showCreationForm(@ModelAttribute TaskForm form, Model model){ // @ModelAttribute -> model.addAttribute("form", form)
+    public String showCreationForm(TaskForm form, Model model){
         model.addAttribute("mode", "CREATE");
         return "tasks/form";
     }
@@ -53,8 +61,8 @@ public class TaskController {
     //書き込み機能
     @PostMapping
     public String create(@Validated TaskForm form,
-                         @RequestParam(defaultValue = "1") int page,
                          BindingResult bindingResult,
+                         @RequestParam(defaultValue = "1") int page,
                          Model model,
                          RedirectAttributes ra){ // @Validated -> Jakarta Validation check
         if(bindingResult.hasErrors()){
@@ -102,6 +110,28 @@ public class TaskController {
     public String delete(@PathVariable("id") long id){
         taskService.delete(id);
         return "redirect:/tasks";
+    }
+
+    @PostMapping("/{id}/comments")
+    public String createComment(@PathVariable("id") long id,
+                                @RequestParam String content,
+                                @RequestParam(defaultValue = "1") int page,
+                                RedirectAttributes ra){
+
+        var commentCount = commentService.countByTaskId(id);
+        commentService.create(new CommentEntity(null, id, commentCount+1L, content,"test"));
+        ra.addAttribute("page", page);
+        return "redirect:/tasks/{id}"; //PRGパタン、redirectにはRedirectAttributesが必要
+    }
+
+    @DeleteMapping("/{id}/comments/{commentOrder}")
+    public String deleteComment(@PathVariable("id") long taskId,
+                                @PathVariable("commentOrder") long commentOrder,
+                                @RequestParam(defaultValue = "1") int page,
+                                RedirectAttributes ra){
+        commentService.delete(taskId, commentOrder);
+        ra.addAttribute("page", page);
+        return "redirect:/tasks/{id}";
     }
 
 }

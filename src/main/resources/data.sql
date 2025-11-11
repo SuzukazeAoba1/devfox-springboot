@@ -14,3 +14,6 @@ INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot13', 'Sprin
 INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot14', 'Spring Boot14 test', 'DOING');
 INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot15', 'Spring Boot15 test', 'DONE');
 INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot16', 'Spring Boot16 test', 'DOING');
+
+INSERT INTO comment (tasks_id, tasks_order, content, writer) VALUES ('1', '1', 'comment test', 'test');
+INSERT INTO comment (tasks_id, tasks_order, content, writer) VALUES ('1', '2', 'comment test', 'test');
