@@ -2,6 +2,7 @@ package com.example.demo.controller.task;
 
 import com.example.demo.service.comment.CommentEntity;
 
+//DB -> front
 public record CommentDTO (
         Long id,
         Long tasks_id,

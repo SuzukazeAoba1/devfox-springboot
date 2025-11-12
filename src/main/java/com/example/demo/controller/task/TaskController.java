@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor // コンストラクタの自動生成
-@RequestMapping("/tasks")
+@RequestMapping("/tasks") // Mapping Root (Base)
 public class TaskController {
 
     private final TaskService taskService;
@@ -41,6 +41,7 @@ public class TaskController {
         var taskDTO = taskService.findById(taskId)
                 .map(TaskDTO::toDTO)
                 .orElseThrow(TaskNotFoundException::new); //投稿が存在しない場合
+
         var commentList = commentService.findByTaskId(taskId)
                 .stream()
                 .map(CommentDTO::toDTO)

@@ -17,3 +17,5 @@ INSERT INTO tasks (summary, description, status) VALUES ('Spring Boot16', 'Sprin
 
 INSERT INTO comment (tasks_id, tasks_order, content, writer) VALUES ('1', '1', 'comment test', 'test');
 INSERT INTO comment (tasks_id, tasks_order, content, writer) VALUES ('1', '2', 'comment test', 'test');
+
+INSERT INTO users (loginId, password, nickname, role) VALUES ('admin', '1234', 'admin', 'ADMIN');

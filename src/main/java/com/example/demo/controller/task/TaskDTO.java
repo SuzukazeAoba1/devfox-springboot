@@ -2,6 +2,7 @@ package com.example.demo.controller.task;
 
 import com.example.demo.service.task.TaskEntity;
 
+//DB -> front
 public record TaskDTO (
         long id,
         String summary,
