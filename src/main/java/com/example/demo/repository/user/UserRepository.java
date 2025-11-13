@@ -20,18 +20,4 @@ public interface UserRepository {
             """)
     void addUser(@Param("entity") UserEntity entity);
 
-//    @Update("""
-//            UPDATE Users
-//            SET
-//                summary     = #{task.summary},
-//                description = #{task.description},
-//                status      = #{task.status}
-//            WHERE
-//                id          = #{task.id}
-//            """)
-//    void update(@Param("Users") TaskEntity entity);
-//
-//    @Delete("DELETE FROM Users WHERE id = #{taskId}")
-//    void delete(@Param("taskId") long id);
-
 }

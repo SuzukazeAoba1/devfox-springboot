@@ -7,7 +7,9 @@ public record TaskDTO (
         long id,
         String summary,
         String description,
-        String status
+        String status,
+        String loginId,
+        String nickname
 ) {
 
     // Entity -> DTO
@@ -16,7 +18,9 @@ public record TaskDTO (
                 entity.id(),
                 entity.summary(),
                 entity.description(),
-                entity.status().name()
+                entity.status().name(),
+                entity.loginId(),
+                entity.nickname()
         );
     }
 

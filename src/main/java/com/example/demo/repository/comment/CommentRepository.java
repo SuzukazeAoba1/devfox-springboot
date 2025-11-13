@@ -8,18 +8,18 @@ import java.util.List;
 @Mapper
 public interface CommentRepository {
 
-    @Select("SELECT COUNT(*) FROM comment Where tasks_id = #{id};")
+    @Select("SELECT COUNT(*) FROM comments Where tasks_id = #{id};")
     int countByTaskId(@Param("id") long taskId);
 
-    @Select("SELECT * FROM comment Where tasks_id = #{id};")
+    @Select("SELECT * FROM comments Where tasks_id = #{id};")
     List<CommentEntity> selectByTaskId(@Param("id") long taskId);
 
     @Insert("""
-            INSERT INTO comment (tasks_id, tasks_order, content, writer)
-            VALUES (#{comment.tasks_id}, #{comment.tasks_order}, #{comment.content}, #{comment.writer})
+            INSERT INTO comments (tasks_id, tasks_order, content, loginId, nickname)
+            VALUES (#{comment.tasks_id}, #{comment.tasks_order}, #{comment.content}, #{comment.loginId}, #{comment.nickname})
             """)
     void insert(@Param("comment") CommentEntity newEntity);
 
-    @Delete("DELETE FROM comment WHERE tasks_id = #{taskId} AND tasks_order = #{commentOrder}")
+    @Delete("DELETE FROM comments WHERE tasks_id = #{taskId} AND tasks_order = #{commentOrder}")
     void delete(@Param("taskId") long taskId, @Param("commentOrder") long commentOrder);
 }

@@ -5,6 +5,7 @@ public record CommentEntity(
         Long tasks_id,
         Long tasks_order,
         String content,
-        String writer
+        String loginId,
+        String nickname
 ) {
 }

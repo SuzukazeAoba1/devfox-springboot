@@ -24,7 +24,7 @@ public class UserController {
     @PostMapping("/login")
     public String login(@RequestParam String loginId, //RequestParam 活用練習
                         @RequestParam String password,
-                        HttpServletRequest httpServletRequest){
+                        HttpServletRequest request){
 
         if(loginId.isBlank() || password.isBlank()) {
             return "redirect:/";
@@ -37,11 +37,13 @@ public class UserController {
         }
 
         // session init
-        httpServletRequest.getSession().invalidate();
+        request.getSession().invalidate();
 
         // make session
-        HttpSession session = httpServletRequest.getSession(true);
+        HttpSession session = request.getSession(true);
+        session.setAttribute("loginId", user.loginId());
         session.setAttribute("nickname", user.nickname());
+        session.setAttribute("role", user.role());
 
         // session timeout 30分
         session.setMaxInactiveInterval(1800);

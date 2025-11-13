@@ -27,12 +27,12 @@ public record TaskForm(
     }
 
     // form 登録 -> Entity
-    public TaskEntity toEntity(){
-        return new TaskEntity(null, summary(), description(), TaskStatus.valueOf(status()));
+    public TaskEntity toEntity(String loginId, String nickname){
+        return new TaskEntity(null, summary(), description(), TaskStatus.valueOf(status()), loginId, nickname);
     }
 
-    // form 修正 -> Entity
+    // form 修正 -> Entity (UpdateにはIDが必要しない)
     public TaskEntity toEntity(Long id){
-        return new TaskEntity(id, summary(), description(), TaskStatus.valueOf(status()));
+        return new TaskEntity(id, summary(), description(), TaskStatus.valueOf(status()), null, null);
     }
 }

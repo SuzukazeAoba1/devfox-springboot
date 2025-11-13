@@ -15,12 +15,12 @@ public interface TaskRepository {
     @Select("SELECT * FROM tasks LIMIT #{count} OFFSET #{offset}")
     List<TaskEntity> selectList(@Param("offset") int offset, @Param("count") int count);
 
-    @Select("SELECT id, summary, description, status FROM tasks Where id = #{taskId};")
+    @Select("SELECT * FROM tasks Where id = #{taskId};")
     Optional<TaskEntity> selectById(@Param("taskId") long taskId);
 
     @Insert("""
-            INSERT INTO tasks (summary, description, status)
-            VALUES (#{task.summary}, #{task.description}, #{task.status})
+            INSERT INTO tasks (summary, description, status, loginId, nickname)
+            VALUES (#{task.summary}, #{task.description}, #{task.status}, #{task.loginId}, #{task.nickname})
             """)
     void insert(@Param("task") TaskEntity newEntity);
 

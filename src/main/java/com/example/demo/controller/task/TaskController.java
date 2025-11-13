@@ -3,6 +3,8 @@ package com.example.demo.controller.task;
 import com.example.demo.service.comment.CommentEntity;
 import com.example.demo.service.comment.CommentService;
 import com.example.demo.service.task.TaskService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,8 +23,12 @@ public class TaskController {
 
     //リスト照会機能
     @GetMapping
-    public String list(Model model,
-                       @RequestParam(value = "page", required = false, defaultValue = "1") int page){
+    public String list(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                       @SessionAttribute("nickname") String nickname,
+                       Model model,
+                       HttpServletRequest request){
+
+        HttpSession session = request.getSession(false);
 
         var taskList = taskService.findList(page)
                 .stream()   // Iterator (List -> Stream)
@@ -32,12 +38,15 @@ public class TaskController {
         model.addAttribute("maxPageNum", taskService.getCountPageNum());
         model.addAttribute("taskList", taskList);
         model.addAttribute("page", page);
+        model.addAttribute("nickname", nickname);
         return "tasks/list";
     }
 
     //読み取り機能
     @GetMapping("/{id}")
-    public String showDetail(@PathVariable("id") long taskId, Model model){ // mapping 変数 -> @PathVariable 代入
+    public String showDetail(@PathVariable("id") long taskId,
+                             Model model){ // mapping 変数 -> @PathVariable 代入
+
         var taskDTO = taskService.findById(taskId)
                 .map(TaskDTO::toDTO)
                 .orElseThrow(TaskNotFoundException::new); //投稿が存在しない場合
@@ -49,6 +58,7 @@ public class TaskController {
 
         model.addAttribute("task", taskDTO);
         model.addAttribute("comment", commentList);
+
         return "tasks/detail";
     }
 
@@ -63,13 +73,15 @@ public class TaskController {
     @PostMapping
     public String create(@Validated TaskForm form,
                          BindingResult bindingResult,
+                         @SessionAttribute("loginId") String loginId,
+                         @SessionAttribute("nickname") String nickname,
                          @RequestParam(defaultValue = "1") int page,
                          Model model,
                          RedirectAttributes ra){ // @Validated -> Jakarta Validation check
         if(bindingResult.hasErrors()){
             return showCreationForm(form, model);
         }
-        taskService.create(form.toEntity());
+        taskService.create(form.toEntity(loginId, nickname));
         ra.addAttribute("page", page);
         return "redirect:/tasks"; //PRGパタン、redirectにはRedirectAttributesが必要
     }
@@ -87,10 +99,10 @@ public class TaskController {
 
     //修正機能
     @PutMapping("{id}")
-    public String update(@PathVariable("id") long id,
-                         @RequestParam(defaultValue = "1") int page,
-                         @Validated @ModelAttribute TaskForm form,
+    public String update(@Validated @ModelAttribute TaskForm form,
                          BindingResult bindingResult,
+                         @PathVariable("id") long id,
+                         @RequestParam(defaultValue = "1") int page,
                          Model model,
                          RedirectAttributes ra
     ){
@@ -115,12 +127,14 @@ public class TaskController {
 
     @PostMapping("/{id}/comments")
     public String createComment(@PathVariable("id") long id,
+                                @SessionAttribute("loginId") String loginId,
+                                @SessionAttribute("nickname") String nickname,
                                 @RequestParam String content,
                                 @RequestParam(defaultValue = "1") int page,
                                 RedirectAttributes ra){
 
         var commentCount = commentService.countByTaskId(id);
-        commentService.create(new CommentEntity(null, id, commentCount+1L, content,"test"));
+        commentService.create(new CommentEntity(null, id, commentCount+1L, content,loginId, nickname));
         ra.addAttribute("page", page);
         return "redirect:/tasks/{id}"; //PRGパタン、redirectにはRedirectAttributesが必要
     }

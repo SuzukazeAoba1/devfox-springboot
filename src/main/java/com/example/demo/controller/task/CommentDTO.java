@@ -8,13 +8,14 @@ public record CommentDTO (
         Long tasks_id,
         Long tasks_order,
         String content,
-        String writer
+        String loginId,
+        String nickname
 ) {
 
     // Entity -> DTO
     public static CommentDTO toDTO(CommentEntity e){
         return new CommentDTO(
-                e.id(), e.tasks_id(), e.tasks_order(), e.content(), e.writer()
+                e.id(), e.tasks_id(), e.tasks_order(), e.content(), e.loginId(), e.nickname()
         );
     }
 
