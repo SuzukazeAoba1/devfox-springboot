@@ -1,27 +1,27 @@
 package com.example.demo.repository.user;
 
+import com.example.demo.service.user.UserEntity;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.Optional;
 
 @Mapper
 public interface UserRepository {
 
-//    @Select("SELECT COUNT(*) FROM tasks;")
-//    int selectAllCounter();
-//
-//    @Select("SELECT * FROM tasks LIMIT #{count} OFFSET #{offset}")
-//    List<TaskEntity> selectList(@Param("offset") int offset, @Param("count") int count);
-//
-//    @Select("SELECT id, summary, description, status FROM tasks Where id = #{taskId};")
-//    Optional<TaskEntity> selectById(@Param("taskId") long taskId);
-//
-//    @Insert("""
-//            INSERT INTO tasks (summary, description, status)
-//            VALUES (#{task.summary}, #{task.description}, #{task.status})
-//            """)
-//    void insert(@Param("task") TaskEntity newEntity);
-//
+    @Select("SELECT * FROM Users Where loginId = #{loginId};")
+    Optional<UserEntity> findByLoginId(@Param("loginId") String loginId);
+
+    @Insert("""
+            INSERT INTO Users (loginId, password, nickname, role)
+            VALUES (#{entity.loginId}, #{entity.password}, #{entity.nickname}, #{entity.role});
+            """)
+    void addUser(@Param("entity") UserEntity entity);
+
 //    @Update("""
-//            UPDATE tasks
+//            UPDATE Users
 //            SET
 //                summary     = #{task.summary},
 //                description = #{task.description},
@@ -29,9 +29,9 @@ public interface UserRepository {
 //            WHERE
 //                id          = #{task.id}
 //            """)
-//    void update(@Param("task") TaskEntity entity);
+//    void update(@Param("Users") TaskEntity entity);
 //
-//    @Delete("DELETE FROM tasks WHERE id = #{taskId}")
+//    @Delete("DELETE FROM Users WHERE id = #{taskId}")
 //    void delete(@Param("taskId") long id);
 
 }

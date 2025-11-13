@@ -10,4 +10,7 @@ public record UserEntity(
         UserRole role,
         Timestamp created_at
 ) {
+
+
+
 }

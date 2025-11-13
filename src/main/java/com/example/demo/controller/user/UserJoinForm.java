@@ -1,5 +1,7 @@
 package com.example.demo.controller.user;
 
+import com.example.demo.service.user.UserEntity;
+import com.example.demo.service.user.UserRole;
 import jakarta.validation.constraints.Size;
 
 //front -> DB
@@ -13,4 +15,10 @@ public record UserJoinForm(
         @Size(min = 3, max = 20)
         String nickname
 ) {
+
+    // form 登録 -> Entity
+    public UserEntity toEntity(){
+        return new UserEntity(null, loginId(), password1(), nickname(), UserRole.USER, null);
+    }
+
 }

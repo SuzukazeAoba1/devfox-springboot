@@ -13,9 +13,9 @@
     <h2 class="mt-3" th:text="'#' + *{id} + ' ' + *{summary}"></h2>
     <hr>
     <p class="mt-3" th:text="*{status}"></p>
-    <hr><hr>
+    <hr>
     <pre class="mt-3" th:text="*{description}"></pre>
-    <hr><hr>
+    <hr>
     <div th:each="com : ${comment}" th:object="${com}">
         <form th:action="@{/tasks/{id}/comments/{commentOrder}?page={page}
                              (id=${id}, commentOrder=*{tasks_order}, page=${param.page})}"
