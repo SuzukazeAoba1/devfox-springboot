@@ -3,6 +3,7 @@ package com.example.demo.service.user;
 import com.example.demo.controller.user.UserJoinForm;
 import com.example.demo.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,7 +23,7 @@ public class UserService {
 
         UserEntity user = optionalUser.get();
 
-        if(!user.password().equals(password)) {
+        if(!matchesBcrypt(password, user.password(),10)) {
             return null;
         }
 
@@ -37,8 +38,19 @@ public class UserService {
             return false;
         }
 
-        userRepository.addUser(form.toEntity());
+        var pass = encodeBcrypt(form.password1(),10);
+        userRepository.addUser(form.toEntity(pass));
         return true;
+    }
+
+    // https://bbubbush.tistory.com/36#google_vignette
+    public String encodeBcrypt(String planeText, int strength) {
+        return new BCryptPasswordEncoder(strength).encode(planeText);
+    }
+
+    public boolean matchesBcrypt(String planeText, String hashValue, int strength) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(strength);
+        return passwordEncoder.matches(planeText, hashValue);
     }
 
 }

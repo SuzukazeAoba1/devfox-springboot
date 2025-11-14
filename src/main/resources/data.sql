@@ -18,5 +18,6 @@ INSERT INTO tasks (summary, description, status, loginId, nickname) VALUES ('Spr
 INSERT INTO comments (tasks_id, tasks_order, content, loginId, nickname) VALUES ('1', '1', 'comment test', 'admin', 'admin');
 INSERT INTO comments (tasks_id, tasks_order, content, loginId, nickname) VALUES ('1', '2', 'comment test', 'test', 'test');
 
-INSERT INTO users (loginId, password, nickname, role) VALUES ('admin', '1234', 'admin', 'ADMIN');
-INSERT INTO users (loginId, password, nickname, role) VALUES ('test', '1234', 'test', 'USER');
+-- パスワード　: 1q2w3e4r
+INSERT INTO users (loginId, password, nickname, role) VALUES ('admin', '$2a$10$ChHflbw8YPjPL/IQ2Sd..ujcIpzTw1MPpJJzVkXxmsQm.UQAoR7gy', 'admin', 'ADMIN');
+INSERT INTO users (loginId, password, nickname, role) VALUES ('test', '$2a$10$ChHflbw8YPjPL/IQ2Sd..ujcIpzTw1MPpJJzVkXxmsQm.UQAoR7gy', 'test', 'USER');

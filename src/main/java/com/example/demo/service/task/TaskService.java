@@ -35,7 +35,7 @@ public class TaskService {
     }
 
     public int getCountPageNum() {
-        return taskRepository.selectAllCounter() / 5 + 1;
+        return (taskRepository.selectAllCounter() - 1) / 5 + 1;
     }
 
     public Optional<TaskEntity> findById(long taskId) {

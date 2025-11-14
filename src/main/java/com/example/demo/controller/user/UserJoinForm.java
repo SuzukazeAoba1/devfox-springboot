@@ -17,8 +17,8 @@ public record UserJoinForm(
 ) {
 
     // form 登録 -> Entity
-    public UserEntity toEntity(){
-        return new UserEntity(null, loginId(), password1(), nickname(), UserRole.USER, null);
+    public UserEntity toEntity(String pass){
+        return new UserEntity(null, loginId(), pass, nickname(), UserRole.USER, null);
     }
 
 }

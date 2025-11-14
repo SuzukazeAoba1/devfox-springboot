@@ -23,7 +23,10 @@
             <div class="mt-3">
                 <p style="display: inline;" th:text="*{content}"></p>
                 <td th:text="' - ' + *{nickname}"></td>
-                <button type="submit">x</button>
+                <!-- 削除は自身と管理者 -->
+                <th:block th:if="${loginId} == *{loginId} or ${role} == 'ADMIN'">
+                    <button type="submit">x</button>
+                </th:block>
             </div>
         </form>
     </div>
@@ -35,15 +38,20 @@
     </form>
     <hr>
     <div>
-        <a th:href="@{/tasks/{id}/editForm?page={page}(id=${id}, page=${param.page})}" class="btn btn-primary mt-3">編集</a>
+        <!-- 修正は自身だけ -->
+        <th:block th:if="${loginId} == ${task.loginId}">
+            <a th:href="@{/tasks/{id}/editForm?page={page}(id=${id}, page=${param.page})}" class="btn btn-primary mt-3">編集</a>
+        </th:block>
+        <!-- 削除は自身と管理者 -->
+        <th:block th:if="${loginId} == ${task.loginId} or ${role} == 'ADMIN'">
         <form th:action="@{/tasks/{id}(id=${id})}"
               th:method="delete"
               style="display: inline;"
               onclick="return confirm('タスクを削除しますか？');">
             <button type="submit" class="btn btn-danger mt-3">削除</button>
         </form>
+        </th:block>
     </div>
-
 </div>
 </body>
 </html>

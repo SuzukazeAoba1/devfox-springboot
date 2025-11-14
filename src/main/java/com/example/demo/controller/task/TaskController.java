@@ -45,6 +45,8 @@ public class TaskController {
     //読み取り機能
     @GetMapping("/{id}")
     public String showDetail(@PathVariable("id") long taskId,
+                             @SessionAttribute("loginId") String loginId,
+                             @SessionAttribute("role") String role,
                              Model model){ // mapping 変数 -> @PathVariable 代入
 
         var taskDTO = taskService.findById(taskId)
@@ -58,6 +60,8 @@ public class TaskController {
 
         model.addAttribute("task", taskDTO);
         model.addAttribute("comment", commentList);
+        model.addAttribute("loginId", loginId);
+        model.addAttribute("role", role);
 
         return "tasks/detail";
     }
@@ -88,12 +92,25 @@ public class TaskController {
 
     //修正フォーム
     @GetMapping("/{id}/editForm")
-    public String showEditForm(@PathVariable("id") long id, Model model) {
-        var form = taskService.findById(id)
-                .map(TaskForm::fromEntity)
-                .orElseThrow(TaskNotFoundException::new);
+    public String showEditForm(@PathVariable("id") long id,
+                               @SessionAttribute("loginId") String loginId,
+                               @RequestParam(defaultValue = "1") int page,
+                               Model model, RedirectAttributes ra) {
+
+        var taskEntity = taskService.findById(id);
+        var form = taskEntity.map(TaskForm::fromEntity)
+                             .orElseThrow(TaskNotFoundException::new);
+
+        String userId = taskEntity.get().loginId();
+
+        if(!userId.equals(loginId)){
+            ra.addAttribute("page", page);
+            return "redirect:/tasks";
+        }
+
         model.addAttribute("taskForm", form);
         model.addAttribute("mode", "EDIT");
+
         return "tasks/form";
     }
 
@@ -101,6 +118,7 @@ public class TaskController {
     @PutMapping("{id}")
     public String update(@Validated @ModelAttribute TaskForm form,
                          BindingResult bindingResult,
+                         @SessionAttribute("loginId") String loginId,
                          @PathVariable("id") long id,
                          @RequestParam(defaultValue = "1") int page,
                          Model model,
@@ -112,16 +130,29 @@ public class TaskController {
             return "tasks/form";
         }
 
-        var entity = form.toEntity(id);
-        taskService.update(entity);
+        var formEntity = form.toEntity(id);
+        taskService.update(formEntity);
         ra.addAttribute("page", page);
         return "redirect:/tasks/{id}"; //redirectにはRedirectAttributesが必要
     }
 
     //削除機能
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") long id){
-        taskService.delete(id);
+    public String delete(@PathVariable("id") long id,
+                         @SessionAttribute("loginId") String loginId,
+                         @SessionAttribute("role") String role){
+
+        var entity = taskService.findById(id);
+        String userId = "";
+
+        if(entity.isPresent()) {
+            userId = entity.get().loginId();
+        }
+
+        if(userId.equals(loginId) || role.equals("ADMIN")){
+            taskService.delete(id);
+        }
+
         return "redirect:/tasks";
     }
 
